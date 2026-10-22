@@ -1,0 +1,10 @@
+import { cp, mkdir, rm, copyFile } from 'node:fs/promises';
+import path from 'node:path';
+const root = process.cwd();
+const out = path.join(root, 'dist');
+await rm(out, { recursive: true, force: true });
+await mkdir(out, { recursive: true });
+await cp(path.join(root, 'public'), path.join(out, 'public'), { recursive: true });
+await cp(path.join(root, 'lib'), path.join(out, 'lib'), { recursive: true });
+for (const file of ['server.js', 'package.json']) await copyFile(path.join(root, file), path.join(out, file));
+console.log('Production bundle written to dist/. Run it with node dist/server.js.');
